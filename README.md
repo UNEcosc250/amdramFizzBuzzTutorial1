@@ -16,8 +16,13 @@ The referee will also send a `Wrong` message and eliminate any player that gets 
 
 Play keeps counting even after `Wrong`s.
 
-There are two versions of the game. One uses untyped actors (classic actors) and the other uses typed actors.
-For each case:
+There are two versions of the game. Both use Amdram, but they are set up in different styles
+
+1. `functional` sets the Actors up using a functional programming style
+2. `untyped` uses inheritence and sets them up as if they were untyped actors (by having the MessageHandlers accept Any)
+
+
+In each case, your task is just to play with the actors and get a feel for how they work.
 
 1. In `MyApp`, set up a ring of `Terrible` players and start them playing. 
    They will get it all wrong, but won't even know. 
@@ -25,8 +30,7 @@ For each case:
 
 2. Write a player who will play the game correctly (implement `FizzBuzzActor`), and set up a ring of them
 
-3. Try changing the `Referee`'s code to use the ask pattern `?` instead of `!` for sending out the challenges and 
-   testing the responses
+3. Try changing the `Referee`'s code to use the ask pattern 
 
-(If you're having trouble working out whether to reply with `Fizz` or `Buzz` for a number, crib from the Referee's
-code for checking the answer.)
+4. At the moment, the main thread just stays awake for 1 second while the program runs. Try changing it so that it
+   has the referee send a message or fill a future so that the program can exit when the game is done.

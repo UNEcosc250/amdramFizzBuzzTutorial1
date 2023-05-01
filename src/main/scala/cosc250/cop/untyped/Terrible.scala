@@ -1,6 +1,6 @@
 package cosc250.cop.untyped
 
-import akka.actor.{Actor, ActorRef}
+import com.wbillingsley.amdram.*
 import cosc250.cop._
 import Word._
 
@@ -10,7 +10,7 @@ import scala.util.Random
   * This Actor is shockingly awful at this game. It gets the number and increments it,
   * but
   */
-class Terrible extends Actor {
+class Terrible extends MessageHandler[Any] {
 
   private var num:Int = 0
 
@@ -23,16 +23,14 @@ class Terrible extends Actor {
     )(Random.nextInt(4))
   }
 
-  def respond() = {
-    val n = nextResponse()
-    println("Terrible says " + n)
-    sender() ! n
-  }
-
-  def receive = log("Terrible") andThen {
-    case RefereeMessage.YourTurn => respond()
-    case _ =>
-      num += 1
+  override def receive(msg:Any)(using context:ActorContext[Any]) = {
+    log("Terrible")(msg) 
+    msg match {
+      case (RefereeMessage.YourTurn, referee:Recipient[Any] @unchecked) => 
+        referee ! (nextResponse(), context.self)
+      case _ =>
+        num += 1
+    }
   }
 
 }

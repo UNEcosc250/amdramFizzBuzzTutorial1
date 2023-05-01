@@ -1,7 +1,5 @@
 package cosc250.cop
 
-import akka.actor.ActorRef
-
 /*
  * First, because we're working with Actors, we need some messages to pass
  * Note: we can also just pass a bare Int! Normally we wouldn't -- it's nice to have a single trait

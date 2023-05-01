@@ -1,7 +1,8 @@
-package cosc250.cop.typed
+package cosc250.cop.functional
 
-import akka.actor.typed.ActorRef
+import com.wbillingsley.amdram.*
 import cosc250.cop._
+import com.wbillingsley.amdram.Recipient
 
 // The big complication in Akka Typed is that messages need to include the sender.
 // That's because if there was just a sender() method to get them, it wouldn't be possible for the compiler to know
@@ -11,10 +12,10 @@ import cosc250.cop._
 // * and have types for the messages that can be received
 
 /** What a Player actor can say / send */
-case class PlayerSays(message: FizzBuzzMessage, from: ActorRef[PlayerHears])
+case class PlayerSays(message: FizzBuzzMessage, from: Recipient[PlayerHears])
 
 /** What a Referee actor can say / send */
-case class RefereeSays(message: FizzBuzzMessage | RefereeMessage, from: ActorRef[RefereeHears])
+case class RefereeSays(message: FizzBuzzMessage | RefereeMessage, from: Recipient[RefereeHears])
 
 /** A message to start the game */
 case object Go

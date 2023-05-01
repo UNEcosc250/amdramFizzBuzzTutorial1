@@ -1,6 +1,4 @@
-package cosc250.cop.untyped
-
-import akka.actor.Actor
+package cosc250.cop
 
 /**
   * This is a little utility method I've made. It creates a PartialFunction that
@@ -11,10 +9,8 @@ import akka.actor.Actor
   *
   * log("MyActor") andThen { case ... }
   */
-def log(name: String): PartialFunction[Any, Any] = {
-  case m =>
-    println(s"$name received $m")
-    m
+def log(name: String)(msg:Any) = {
+  println(s"$name received $msg")
 }
 
 

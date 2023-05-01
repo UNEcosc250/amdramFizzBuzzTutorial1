@@ -1,13 +1,7 @@
 package cosc250.cop.untyped
 
 import java.util.concurrent.TimeoutException
-import akka.actor._
-import akka.pattern.ask
-import akka.util.Timeout
-
-import scala.concurrent.duration.FiniteDuration
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
+import com.wbillingsley.amdram.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import cosc250.cop._
@@ -15,22 +9,29 @@ import cosc250.cop._
 @main def app() = {
 
   // Create the actor system
-  val system = ActorSystem("PingPongSystem")
-  system.whenTerminated.foreach(_ => System.exit(0))
+  val troupe = SingleEcTroupe()
   println("Created the actor system")
 
-  val referee = system.actorOf(Props[Referee], name = "Referee")
+  val referee = troupe.spawn(Referee())
 
   // Create three of your players
-  val algernon = system.actorOf(Props(classOf[FizzBuzzActor], "Algernon"), name = "Algernon")
-  val bertie = system.actorOf(Props(classOf[FizzBuzzActor], "Bertie"), name = "Bertie")
-  val cecily = system.actorOf(Props(classOf[FizzBuzzActor], "Cecily"), name = "Cecily")
+  val algernon = troupe.spawn(FizzBuzzActor("Algernon"))
+  val bertie = troupe.spawn(FizzBuzzActor("Bertie"))
+  val cecily = troupe.spawn(FizzBuzzActor("Cecily"))
 
   // Create a terrible player
-  val hello = system.actorOf(Props[Terrible], name = "Terrible")
+  val hello = troupe.spawn(Terrible())
 
   // Give the list of players to the referee to start the game
   referee ! Game(List(algernon, bertie, cecily, hello), 5)
+
+  // Keep the main thread awake for 1 second before it exits
+  try {
+    Thread.sleep(1000)
+  } catch {
+    case _ => 
+      // wake and exit
+  }
 
 }
 

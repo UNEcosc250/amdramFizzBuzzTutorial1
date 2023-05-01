@@ -31,3 +31,9 @@ vagrant/.bashrc
 vagrant/sbt-launch.jar
 
 tmp
+
+#
+.vscode/
+.bsp/
+.metals/
+project/project
